@@ -1,7 +1,6 @@
 package config
 
 import (
-	"log"
 	"os"
 	"strconv"
 
@@ -17,13 +16,14 @@ type Environment struct {
 	DbSSLMode  string
 }
 
-var Env = NewEnvironment()
+var Env *Environment
+
+func init() {
+	Env = NewEnvironment()
+}
 
 func NewEnvironment() *Environment {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	godotenv.Load()
 
 	return &Environment{
 		DbHost:     os.Getenv("DB_HOST"),

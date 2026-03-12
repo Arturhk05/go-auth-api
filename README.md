@@ -26,3 +26,31 @@ In this project I tried to follow Test-Driven Development (TDD) principles, writ
 - [ ] JWT token generation and validation
 - [ ] Password hashing and verification
 - [ ] CORS support
+
+## Project Structure
+
+```
+AuthGo/
+├── .vscode/                      # VS Code workspace settings
+├── cmd/                          # Command-line applications
+│   ├── api/                      # Main API server
+│   │   └── main.go              # Entry point for the API
+│   └── migrate/                  # Database migration CLI
+│       └── main.go              # Migration runner
+├── config/                       # Configuration management
+│   ├── config.go                # Configuration loading and setup
+│   └── config_test.go           # Config tests
+├── database/                     # Database layer
+│   ├── database.go              # Database connection
+│   └── migrations/               # SQL migration files
+├── internal/                     # Private application code
+│   ├── handlers/                 # HTTP request handlers
+│   ├── middlewares/              # HTTP middlewares (auth, CORS, etc)
+│   ├── models/                   # Data models/entities
+│   ├── repositories/             # Data access layer
+│   ├── services/                 # Business logic
+│   └── utils/                    # Utility functions
+├── go.mod                       # Go module definition
+├── go.sum                       # Go dependencies checksums
+└── README.md                    # This file
+```

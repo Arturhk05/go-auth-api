@@ -12,7 +12,7 @@ type postgresDB struct {
 }
 
 func NewPostgresDB() (*postgresDB, error) {
-	connectionString := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", config.Env.DbUser, config.Env.DbPassword, config.Env.DbHost, config.Env.DbPort, config.Env.DbName, config.Env.DbSSLMode)
+	connectionString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", config.Env.Database.User, config.Env.Database.Password, config.Env.Database.Host, config.Env.Database.Port, config.Env.Database.Name, config.Env.Database.SSLMode)
 
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {

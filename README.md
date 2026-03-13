@@ -53,3 +53,31 @@ AuthGo/
 
 - I have roll back my code to a previous commit, because I had no idea about what my code was doing, and I wanted to start over with a better understanding of the project structure and the code itself. (12/06/2024)
 - I give up on TDD, I dont have experience with Golang and I started to struggle with writing tests before writing the actual code, I will write the code first and then write the tests later. (13/06/2024)
+
+## Setup Development
+
+1. Create a `.env` file in the root directory:
+
+```bash
+copy .env.example .env
+```
+
+2. Run docker compose to start the PostgreSQL database:
+
+```bash
+docker compose up -d
+```
+
+3. Run migrations to create the database schema:
+
+```bash
+make migrate-up
+```
+
+4. Start the API server:
+
+```bash
+make run-api
+# or
+go run cmd/api/main.go
+```

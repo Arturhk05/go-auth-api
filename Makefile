@@ -6,3 +6,6 @@ migrate-up:
 
 migrate-down:
 	@go run cmd/migrate/main.go down
+
+run-api: 
+	@go run cmd/api/main.go

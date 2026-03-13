@@ -19,3 +19,9 @@ type User struct {
 	FailedLoginAttempts int        `json:"failed_login_attempts"`
 	LockedUntil         *time.Time `json:"-"`
 }
+
+type RegisterRequest struct {
+	Email    string `json:"email" validate:"required,email,max=100"`
+	Username string `json:"username" validate:"required,min=3,max=50"`
+	Password string `json:"password" validate:"required,min=8,max=100"`
+}

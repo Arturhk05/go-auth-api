@@ -2,12 +2,6 @@
 
 This is an project built with Golang that provides an authentication API implementing good practices.
 
-> This project is intended for study purposes and feedback is welcome. If you have any suggestions for improvements, please feel free to open an issue or submit a pull request.
-
-## TDD
-
-In this project I tried to follow Test-Driven Development (TDD) principles, writing tests before implementing the actual functionality. This approach helps ensure that the code is well-tested and meets the specified requirements.
-
 ### Packages
 
 - **github.com/gin-gonic/gin** - Web framework
@@ -21,7 +15,7 @@ In this project I tried to follow Test-Driven Development (TDD) principles, writ
 
 ## Features
 
-- [ ] User registration with email and password
+- [x] User registration with email and password
 - [ ] User login with email and password
 - [ ] JWT token generation and validation
 - [ ] Password hashing and verification
@@ -54,3 +48,8 @@ AuthGo/
 ├── go.sum                       # Go dependencies checksums
 └── README.md                    # This file
 ```
+
+## Notes
+
+- I have roll back my code to a previous commit, because I had no idea about what my code was doing, and I wanted to start over with a better understanding of the project structure and the code itself. (12/06/2024)
+- I give up on TDD, I dont have experience with Golang and I started to struggle with writing tests before writing the actual code, I will write the code first and then write the tests later. (13/06/2024)

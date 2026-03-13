@@ -38,6 +38,7 @@ func main() {
 	public := r.Group("/")
 	{
 		public.POST("/register", authHandler.Register)
+		public.POST("/login", authHandler.Login)
 	}
 
 	log.Printf("Server starting on port %s", cfg.Server.Port)

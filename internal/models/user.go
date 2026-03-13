@@ -23,5 +23,15 @@ type User struct {
 type RegisterRequest struct {
 	Email    string `json:"email" validate:"required,email,max=100"`
 	Username string `json:"username" validate:"required,min=3,max=50"`
-	Password string `json:"password" validate:"required,min=8,max=100"`
+	Password string `json:"password" validate:"required,min=6,max=128"`
+}
+
+type LoginRequest struct {
+	Email    string `json:"email" validate:"required,email,max=100"`
+	Password string `json:"password" validate:"required,max=128"`
+}
+
+type LoginResponse struct {
+	UserID      uuid.UUID `json:"user_id"`
+	AccessToken string    `json:"token"`
 }

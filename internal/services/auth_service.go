@@ -47,3 +47,29 @@ func (s *AuthService) Register(password string, email string, username string) (
 
 	return user.ID, nil
 }
+
+func (s *AuthService) Login(email string, password string) (*models.LoginResponse, error) {
+	user, err := s.userRepo.GetUserByEmail(email)
+	if err != nil {
+		return nil, fmt.Errorf("invalid email or password")
+	}
+
+	if !user.IsActive {
+		return nil, fmt.Errorf("account is inactive")
+	}
+
+	// TODO: Implement account lockout after multiple failed attempts
+	// TODO: Email verification check
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
+	if err != nil {
+		return nil, fmt.Errorf("invalid email or password")
+	}
+
+	// TODO: Generate JWT token
+
+	return &models.LoginResponse{
+		UserID:      user.ID,
+		AccessToken: "token",
+	}, nil
+}

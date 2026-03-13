@@ -11,8 +11,8 @@ type postgresDB struct {
 	Db *sql.DB
 }
 
-func NewPostgresDB() (*postgresDB, error) {
-	connectionString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", config.Env.Database.User, config.Env.Database.Password, config.Env.Database.Host, config.Env.Database.Port, config.Env.Database.Name, config.Env.Database.SSLMode)
+func NewPostgresDB(cfg *config.Config) (*postgresDB, error) {
+	connectionString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", cfg.Database.User, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port, cfg.Database.Name, cfg.Database.SSLMode)
 
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {

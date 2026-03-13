@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/arturhk05/go-auth-api/config"
 	"github.com/arturhk05/go-auth-api/database"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -12,7 +13,12 @@ import (
 )
 
 func main() {
-	postgresDB, err := database.NewPostgresDB()
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	postgresDB, err := database.NewPostgresDB(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}

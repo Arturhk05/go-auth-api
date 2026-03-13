@@ -29,6 +29,7 @@ type DatabaseConfig struct {
 type ServerConfig struct {
 	Port        string
 	Environment string
+	Host        string
 }
 
 type JWTConfig struct {
@@ -47,23 +48,14 @@ type CORSConfig struct {
 	AllowedOrigins []string
 }
 
-var Env *Config
-
-func init() {
-	var err error
-	Env, err = LoadConfig()
-	if err != nil {
-		panic(fmt.Sprintf("Failed to load config: %v", err))
-	}
-}
-
 func LoadConfig() (*Config, error) {
-	_ = godotenv.Load("../.env")
+	_ = godotenv.Load()
 
 	cfg := &Config{
 		Server: ServerConfig{
 			Port:        getEnv("SERVER_PORT", "8080"),
 			Environment: getEnv("SERVER_ENV", "development"),
+			Host:        getEnv("SERVER_HOST", "localhost"),
 		},
 		Database: DatabaseConfig{
 			Host:     getEnv("DB_HOST", "localhost"),

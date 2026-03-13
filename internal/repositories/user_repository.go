@@ -33,3 +33,39 @@ func (r *UserRepository) CreateUser(user *models.User) error {
 
 	return nil
 }
+
+func (r *UserRepository) GetUserByEmail(email string) (*models.User, error) {
+	if email == "" {
+		return nil, fmt.Errorf("email cannot be empty")
+	}
+
+	query := `
+		SELECT id, email, username, password_hash, created_at, updated_at, is_active, email_verified, last_login_at, failed_login_attempts, locked_until
+		FROM users
+		WHERE email = $1
+	`
+	row := r.db.QueryRow(query, email)
+
+	var user models.User
+	err := row.Scan(
+		&user.ID,
+		&user.Email,
+		&user.Username,
+		&user.PasswordHash,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+		&user.IsActive,
+		&user.EmailVerified,
+		&user.LastLoginAt,
+		&user.FailedLoginAttempts,
+		&user.LockedUntil,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("user not found")
+		}
+		return nil, fmt.Errorf("failed to get user by email: %w", err)
+	}
+
+	return &user, nil
+}

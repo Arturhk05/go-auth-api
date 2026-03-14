@@ -30,12 +30,12 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	_, err := h.authService.Register(req.Password, req.Email, req.Username)
+	resp, err := h.authService.Register(req.Password, req.Email, req.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "registration failed", "message": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"message": "user registered successfully"})
+	c.JSON(http.StatusCreated, resp)
 }
 
 func (h *AuthHandler) Login(c *gin.Context) {

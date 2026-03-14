@@ -31,7 +31,7 @@ type LoginRequest struct {
 	Password string `json:"password" validate:"required,max=128"`
 }
 
-type LoginResponse struct {
+type AuthResponse struct {
 	UserID      uuid.UUID `json:"user_id"`
 	AccessToken string    `json:"token"`
 }

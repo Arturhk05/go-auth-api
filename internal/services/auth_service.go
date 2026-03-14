@@ -6,6 +6,7 @@ import (
 	"github.com/arturhk05/go-auth-api/config"
 	"github.com/arturhk05/go-auth-api/internal/models"
 	"github.com/arturhk05/go-auth-api/internal/repositories"
+	"github.com/arturhk05/go-auth-api/internal/utils"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -22,15 +23,15 @@ func NewAuthService(userRepo *repositories.UserRepository, cfg *config.Config) *
 	}
 }
 
-func (s *AuthService) Register(password string, email string, username string) (uuid.UUID, error) {
+func (s *AuthService) Register(password string, email string, username string) (*models.AuthResponse, error) {
 	_, err := s.userRepo.GetUserByEmail(email)
 	if err == nil {
-		return uuid.Nil, fmt.Errorf("user already exists")
+		return nil, fmt.Errorf("user already exists")
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), s.cfg.Security.BcryptCost)
 	if err != nil {
-		return uuid.Nil, fmt.Errorf("failed to hash password")
+		return nil, fmt.Errorf("failed to hash password")
 	}
 
 	user := &models.User{
@@ -42,13 +43,21 @@ func (s *AuthService) Register(password string, email string, username string) (
 
 	err = s.userRepo.CreateUser(user)
 	if err != nil {
-		return uuid.Nil, fmt.Errorf("failed to create user: %w", err)
+		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
 
-	return user.ID, nil
+	accessToken, err := utils.GenerateAccessToken(user.ID, user.Email, s.cfg.JWT.Secret, s.cfg.JWT.ExpirationHours)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate access token: %w", err)
+	}
+
+	return &models.AuthResponse{
+		UserID:      user.ID,
+		AccessToken: accessToken,
+	}, nil
 }
 
-func (s *AuthService) Login(email string, password string) (*models.LoginResponse, error) {
+func (s *AuthService) Login(email string, password string) (*models.AuthResponse, error) {
 	user, err := s.userRepo.GetUserByEmail(email)
 	if err != nil {
 		return nil, fmt.Errorf("invalid email or password")
@@ -60,16 +69,20 @@ func (s *AuthService) Login(email string, password string) (*models.LoginRespons
 
 	// TODO: Implement account lockout after multiple failed attempts
 	// TODO: Email verification check
+	// TODO: Verify locked account status
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
 	if err != nil {
 		return nil, fmt.Errorf("invalid email or password")
 	}
 
-	// TODO: Generate JWT token
+	accessToken, err := utils.GenerateAccessToken(user.ID, user.Email, s.cfg.JWT.Secret, s.cfg.JWT.ExpirationHours)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate access token: %w", err)
+	}
 
-	return &models.LoginResponse{
+	return &models.AuthResponse{
 		UserID:      user.ID,
-		AccessToken: "token",
+		AccessToken: accessToken,
 	}, nil
 }

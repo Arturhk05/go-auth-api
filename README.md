@@ -16,10 +16,10 @@ This is an project built with Golang that provides an authentication API impleme
 ## Features
 
 - [x] User registration with email and password
-- [ ] User login with email and password
-- [ ] JWT token generation and validation
-- [ ] Password hashing and verification
-- [ ] CORS support
+- [x] User login with email and password
+- [x] JWT token generation and validation
+- [x] Password hashing and verification
+- [x] CORS support
 
 ## Project Structure
 

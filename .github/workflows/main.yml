@@ -24,6 +24,23 @@ jobs:
         with:
           files: ./coverage.out
 
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.25.8'
+
+      - name: Build API
+        run: go build -o authgo-api ./cmd/api
+
+      - name: Build CLI (migrate)
+        run: go build -o authgo-migrate ./cmd/migrate
+
   security:
     runs-on: ubuntu-latest
     name: Security Scan
@@ -47,13 +64,13 @@ jobs:
 
   status:
     runs-on: ubuntu-latest
-    needs: [test, security]
+    needs: [test, build, security]
     if: always()
     name: Pipeline Status
     steps:
       - name: Check pipeline status
         run: |
-          if [ "${{ needs.test.result }}" = "failure" ] || [ "${{ needs.security.result }}" = "failure" ]; then
+          if [ "${{ needs.test.result }}" = "failure" ] || [ "${{ needs.build.result }}" = "failure" ] || [ "${{ needs.security.result }}" = "failure" ]; then
             echo "❌ Pipeline failed"
             exit 1
           fi

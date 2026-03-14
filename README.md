@@ -20,6 +20,17 @@ This is an project built with Golang that provides an authentication API impleme
 - [x] JWT token generation and validation
 - [x] Password hashing and verification
 - [x] CORS support
+- [ ] CI/CD pipeline setup
+- [ ] Add Swagger documentation
+- [ ] Implement refresh tokens
+- [ ] Add google OAuth authentication
+- [ ] Add rate limiting
+- [ ] Add email verification
+- [ ] Add password reset functionality
+- [ ] Add user roles and permissions
+- [ ] Add logging and monitoring
+- [ ] Redis caching for session management
+
 
 ## Project Structure
 

@@ -37,6 +37,7 @@ type ServerConfig struct {
 
 type JWTConfig struct {
 	Secret                 string
+	RefreshSecret          string
 	ExpirationHours        int
 	RefreshExpirationHours int
 }
@@ -73,6 +74,7 @@ func LoadConfig() (*Config, error) {
 		},
 		JWT: JWTConfig{
 			Secret:                 getEnv("JWT_SECRET", ""),
+			RefreshSecret:          getEnv("JWT_REFRESH_SECRET", ""),
 			ExpirationHours:        getEnvAsInt("JWT_EXPIRATION_HOURS", 24),
 			RefreshExpirationHours: getEnvAsInt("JWT_REFRESH_EXPIRATION_HOURS", 720),
 		},
@@ -89,6 +91,11 @@ func LoadConfig() (*Config, error) {
 	if cfg.JWT.Secret == "" || len(cfg.JWT.Secret) < 32 {
 		fmt.Printf("Invalid JWT_SECRET: %q", cfg.JWT.Secret)
 		return nil, fmt.Errorf("JWT_SECRET is invalid (minimum 32 characters required)")
+	}
+
+	if cfg.JWT.RefreshSecret == "" || len(cfg.JWT.RefreshSecret) < 32 {
+		fmt.Printf("Invalid JWT_REFRESH_SECRET: %q", cfg.JWT.RefreshSecret)
+		return nil, fmt.Errorf("JWT_REFRESH_SECRET is invalid (minimum 32 characters required)")
 	}
 
 	return cfg, nil

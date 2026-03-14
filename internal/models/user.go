@@ -31,9 +31,14 @@ type LoginRequest struct {
 	Password string `json:"password" validate:"required,max=128"`
 }
 
+type RefreshRequest struct {
+	RefreshToken string `json:"refresh_token" validate:"required"`
+}
+
 type AuthResponse struct {
-	UserID      uuid.UUID `json:"user_id"`
-	AccessToken string    `json:"token"`
+	UserID       uuid.UUID `json:"user_id"`
+	AccessToken  string    `json:"token"`
+	RefreshToken string    `json:"refresh_token,omitempty"`
 }
 
 func (u *User) ToResponse() *User {

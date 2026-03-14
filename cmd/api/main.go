@@ -32,7 +32,8 @@ func main() {
 	}
 
 	userRepo := repositories.NewUserRepository(db.Db)
-	authService := services.NewAuthService(userRepo, cfg)
+	refreshTokenRepo := repositories.NewRefreshTokenRepository(db.Db)
+	authService := services.NewAuthService(userRepo, refreshTokenRepo, cfg)
 	userService := services.NewUserService(userRepo)
 	authHandler := handlers.NewAuthHandler(authService)
 	userHandler := handlers.NewUserHandler(userService)
@@ -47,6 +48,7 @@ func main() {
 	{
 		public.POST("/register", authHandler.Register)
 		public.POST("/login", authHandler.Login)
+		public.POST("/refresh-token", authHandler.RefreshToken)
 	}
 
 	protected := r.Group("/")

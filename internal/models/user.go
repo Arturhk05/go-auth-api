@@ -16,7 +16,7 @@ type User struct {
 	CreatedAt           time.Time  `json:"created_at"`
 	UpdatedAt           time.Time  `json:"updated_at"`
 	LastLoginAt         *time.Time `json:"last_login_at,omitempty"`
-	FailedLoginAttempts int        `json:"failed_login_attempts"`
+	FailedLoginAttempts int        `json:"-"`
 	LockedUntil         *time.Time `json:"-"`
 }
 
@@ -34,4 +34,17 @@ type LoginRequest struct {
 type AuthResponse struct {
 	UserID      uuid.UUID `json:"user_id"`
 	AccessToken string    `json:"token"`
+}
+
+func (u *User) ToResponse() *User {
+	return &User{
+		ID:            u.ID,
+		Email:         u.Email,
+		Username:      u.Username,
+		IsActive:      u.IsActive,
+		EmailVerified: u.EmailVerified,
+		CreatedAt:     u.CreatedAt,
+		UpdatedAt:     u.UpdatedAt,
+		LastLoginAt:   u.LastLoginAt,
+	}
 }

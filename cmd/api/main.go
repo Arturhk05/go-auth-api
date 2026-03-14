@@ -33,7 +33,9 @@ func main() {
 
 	userRepo := repositories.NewUserRepository(db.Db)
 	authService := services.NewAuthService(userRepo, cfg)
+	userService := services.NewUserService(userRepo)
 	authHandler := handlers.NewAuthHandler(authService)
+	userHandler := handlers.NewUserHandler(userService)
 
 	r := gin.Default()
 
@@ -45,6 +47,12 @@ func main() {
 	{
 		public.POST("/register", authHandler.Register)
 		public.POST("/login", authHandler.Login)
+	}
+
+	protected := r.Group("/")
+	protected.Use(middlewares.AuthMiddleware(cfg))
+	{
+		protected.GET("/me", userHandler.GetProfile)
 	}
 
 	log.Printf("Server starting on port %s", cfg.Server.Port)

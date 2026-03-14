@@ -45,3 +45,28 @@ func GenerateAccessToken(userID uuid.UUID, email string, secretKey string, expir
 
 	return tokenString, nil
 }
+
+func ValidateAccessToken(tokenString string, secretKey string) (*Claims, error) {
+	claims := &Claims{}
+
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secretKey), nil
+	})
+
+	if err != nil {
+		return nil, fmt.Errorf("error validating access token: %w", err)
+	}
+
+	if !token.Valid {
+		return nil, fmt.Errorf("invalid access token")
+	}
+
+	if claims.ExpiresAt == nil || claims.ExpiresAt.Before(time.Now()) {
+		return nil, fmt.Errorf("access token has expired")
+	}
+
+	return claims, nil
+}

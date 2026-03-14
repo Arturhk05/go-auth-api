@@ -37,6 +37,8 @@ func main() {
 
 	r := gin.Default()
 
+	r.Use(middlewares.SecurityHeadersMiddleware())
+
 	r.Use(middlewares.CORSMiddleware(cfg))
 
 	public := r.Group("/")
@@ -46,7 +48,17 @@ func main() {
 	}
 
 	log.Printf("Server starting on port %s", cfg.Server.Port)
-	if err := r.Run(fmt.Sprintf(":%s", cfg.Server.Port)); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+	addr := fmt.Sprintf(":%s", cfg.Server.Port)
+
+	if cfg.Server.TLSCertFile != "" && cfg.Server.TLSKeyFile != "" {
+		log.Println("Starting server with TLS/HTTPS")
+		if err := r.RunTLS(addr, cfg.Server.TLSCertFile, cfg.Server.TLSKeyFile); err != nil {
+			log.Fatalf("Failed to start server: %v", err)
+		}
+	} else {
+		log.Println("Starting server with HTTP (no TLS configured)")
+		if err := r.Run(addr); err != nil {
+			log.Fatalf("Failed to start server: %v", err)
+		}
 	}
 }

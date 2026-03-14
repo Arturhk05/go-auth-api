@@ -31,6 +31,8 @@ type ServerConfig struct {
 	Environment string
 	Host        string
 	FrontendURL string
+	TLSCertFile string
+	TLSKeyFile  string
 }
 
 type JWTConfig struct {
@@ -58,6 +60,8 @@ func LoadConfig() (*Config, error) {
 			Environment: getEnv("SERVER_ENV", "development"),
 			Host:        getEnv("SERVER_HOST", "localhost"),
 			FrontendURL: getEnv("FRONTEND_URL", "http://localhost:3000"),
+			TLSCertFile: getEnv("TLS_CERT_FILE", ""),
+			TLSKeyFile:  getEnv("TLS_KEY_FILE", ""),
 		},
 		Database: DatabaseConfig{
 			Host:     getEnv("DB_HOST", "localhost"),

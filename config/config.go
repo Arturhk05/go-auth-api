@@ -30,6 +30,7 @@ type ServerConfig struct {
 	Port        string
 	Environment string
 	Host        string
+	FrontendURL string
 }
 
 type JWTConfig struct {
@@ -56,6 +57,7 @@ func LoadConfig() (*Config, error) {
 			Port:        getEnv("SERVER_PORT", "8080"),
 			Environment: getEnv("SERVER_ENV", "development"),
 			Host:        getEnv("SERVER_HOST", "localhost"),
+			FrontendURL: getEnv("FRONTEND_URL", "http://localhost:3000"),
 		},
 		Database: DatabaseConfig{
 			Host:     getEnv("DB_HOST", "localhost"),

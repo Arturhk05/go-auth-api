@@ -7,6 +7,7 @@ import (
 	"github.com/arturhk05/go-auth-api/config"
 	"github.com/arturhk05/go-auth-api/database"
 	"github.com/arturhk05/go-auth-api/internal/handlers"
+	"github.com/arturhk05/go-auth-api/internal/middlewares"
 	"github.com/arturhk05/go-auth-api/internal/repositories"
 	"github.com/arturhk05/go-auth-api/internal/services"
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer db.Db.Close()
 
 	if cfg.Server.Environment == "production" {
 		gin.SetMode(gin.ReleaseMode)
@@ -34,6 +36,8 @@ func main() {
 	authHandler := handlers.NewAuthHandler(authService)
 
 	r := gin.Default()
+
+	r.Use(middlewares.CORSMiddleware(cfg))
 
 	public := r.Group("/")
 	{

@@ -30,6 +30,7 @@ This is an project built with Golang that provides an authentication API impleme
 - [ ] Add user roles and permissions
 - [ ] Add logging and monitoring
 - [ ] Redis caching for session management
+- [ ] Add unit and integration tests for all components
 
 
 ## Project Structure

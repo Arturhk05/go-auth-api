@@ -22,7 +22,8 @@ This is an project built with Golang that provides an authentication API impleme
 - [x] CORS support
 - [x] CI/CD pipeline setup
 - [x] Implement refresh tokens
-- [ ] Add Swagger documentation
+- [x] Add Swagger documentation
+- [ ] Improve error handling and response formatting
 - [ ] Add google OAuth authentication
 - [ ] Add rate limiting
 - [ ] Add email verification

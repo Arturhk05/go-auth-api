@@ -16,6 +16,15 @@ func NewUserHandler(userService *services.UserService) *UserHandler {
 	return &UserHandler{userService: userService}
 }
 
+// GetProfile godoc
+// @Summary      Get User Profile
+// @Description  Retrieve the profile of the authenticated user
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Security     BearerAuth
+// @Success      200   {object}  models.User
+// @Router       /user/me [get]
 func (h *UserHandler) GetProfile(c *gin.Context) {
 	userIDVal, exists := c.Get("user_id")
 	if !exists {

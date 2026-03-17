@@ -1,0 +1,164 @@
+basePath: /
+definitions:
+  models.AuthResponse:
+    properties:
+      refresh_token:
+        type: string
+      token:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.LoginRequest:
+    properties:
+      email:
+        maxLength: 100
+        type: string
+      password:
+        maxLength: 128
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.RefreshRequest:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  models.RegisterRequest:
+    properties:
+      email:
+        maxLength: 100
+        type: string
+      password:
+        maxLength: 128
+        minLength: 6
+        type: string
+      username:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      email_verified:
+        type: boolean
+      id:
+        type: string
+      is_active:
+        type: boolean
+      last_login_at:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Authentication API built with Go, Gin, and PostgreSQL. Currently with
+    only JWT authentication, but more features are planned for the future.
+  title: Auth API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user and return access and refresh tokens
+      parameters:
+      - description: Login credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AuthResponse'
+      summary: User login
+      tags:
+      - auth
+  /auth/refresh-token:
+    post:
+      consumes:
+      - application/json
+      description: Refresh access tokens
+      parameters:
+      - description: Refresh token
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.RefreshRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AuthResponse'
+      summary: Refresh Auth Tokens
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user and return access and refresh tokens
+      parameters:
+      - description: Registration credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AuthResponse'
+      summary: User Registration
+      tags:
+      - auth
+  /user/me:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve the profile of the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - BearerAuth: []
+      summary: Get User Profile
+      tags:
+      - user
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

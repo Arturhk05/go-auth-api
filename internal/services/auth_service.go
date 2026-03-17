@@ -169,6 +169,14 @@ func (s *AuthService) RefreshToken(refreshToken string) (*models.AuthResponse, e
 	}, nil
 }
 
+func (s *AuthService) Logout(userID uuid.UUID) (bool, error) {
+	err := s.refreshTokenRepo.DeleteRefreshTokenByUserId(userID)
+	if err != nil {
+		return false, fmt.Errorf("logout: delete refresh token: %w", err)
+	}
+	return true, nil
+}
+
 func (s *AuthService) validateRefreshToken(refreshToken string) (*utils.RefreshClaims, error) {
 	refreshClaims, err := utils.ValidateRefreshToken(refreshToken, s.cfg.JWT.RefreshSecret)
 	if err != nil {

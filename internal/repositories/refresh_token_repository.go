@@ -84,3 +84,16 @@ func (r *RefreshTokenRepository) RevokeByUserId(userID uuid.UUID) error {
 
 	return nil
 }
+
+func (r *RefreshTokenRepository) DeleteRefreshTokenByUserId(userID uuid.UUID) error {
+	query := `
+		DELETE FROM refresh_tokens
+		WHERE user_id = $1
+	`
+	_, err := r.db.Exec(query, userID)
+	if err != nil {
+		return fmt.Errorf("failed to delete refresh token: %w", err)
+	}
+
+	return nil
+}

@@ -10,6 +10,7 @@ import (
 	"github.com/arturhk05/go-auth-api/internal/services"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 )
 
 type AuthHandler struct {
@@ -153,4 +154,38 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, resp)
+}
+
+// Logout godoc
+// @Summary      Logout
+// @Description  Logout the current user
+// @Tags         auth
+// @Produce      json
+// @Security     BearerAuth
+// @Success      200   {object}  models.AuthResponse
+// @Failure      401   {object}  models.ErrorResponse  "Token expired, invalid, or revoked"
+// @Failure      403   {object}  models.ErrorResponse  "Account is inactive or locked"
+// @Failure      429   {object}  models.ErrorResponse  "Too many requests"
+// @Failure      500   {object}  models.ErrorResponse  "Internal server error"
+// @Router       /auth/logout [post]
+func (h *AuthHandler) Logout(c *gin.Context) {
+	userIDVal, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "user_id not found in context"})
+		return
+	}
+
+	userID, ok := userIDVal.(uuid.UUID)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid user_id type"})
+		return
+	}
+
+	_, err := h.authService.Logout(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "logout failed"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "logged out successfully"})
 }

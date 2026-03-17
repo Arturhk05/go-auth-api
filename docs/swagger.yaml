@@ -121,6 +121,37 @@ paths:
       summary: User login
       tags:
       - auth
+  /auth/logout:
+    post:
+      description: Logout the current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AuthResponse'
+        "401":
+          description: Token expired, invalid, or revoked
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "403":
+          description: Account is inactive or locked
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "429":
+          description: Too many requests
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Logout
+      tags:
+      - auth
   /auth/refresh-token:
     post:
       consumes:
@@ -201,7 +232,7 @@ paths:
       summary: User Registration
       tags:
       - auth
-  /user/me:
+  /users/me:
     get:
       consumes:
       - application/json

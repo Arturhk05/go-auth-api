@@ -69,7 +69,13 @@ func main() {
 		public.POST("/refresh-token", authHandler.RefreshToken)
 	}
 
-	protected := r.Group("/user")
+	protectedAuth := r.Group("/auth")
+	protectedAuth.Use(middlewares.AuthMiddleware(cfg))
+	{
+		protectedAuth.POST("/logout", authHandler.Logout)
+	}
+
+	protected := r.Group("/users")
 	protected.Use(middlewares.AuthMiddleware(cfg))
 	{
 		protected.GET("/me", userHandler.GetProfile)

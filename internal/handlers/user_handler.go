@@ -31,7 +31,7 @@ func NewUserHandler(userService *services.UserService) *UserHandler {
 // @Failure      404   {object}  models.ErrorResponse  "User not found"
 // @Failure      429   {object}  models.ErrorResponse  "Too many requests"
 // @Failure      500   {object}  models.ErrorResponse  "Internal server error"
-// @Router       /user/me [get]
+// @Router       /users/me [get]
 func (h *UserHandler) GetProfile(c *gin.Context) {
 	userIDVal, exists := c.Get("user_id")
 	if !exists {

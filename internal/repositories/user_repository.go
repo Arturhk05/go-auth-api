@@ -106,3 +106,45 @@ func (r *UserRepository) GetUserById(id uuid.UUID) (*models.User, error) {
 
 	return &user, nil
 }
+
+func (r *UserRepository) UpdateLoginAttempts(id uuid.UUID, failedAttempts int) error {
+	query := `
+		UPDATE users
+		SET failed_login_attempts = $2
+		WHERE id = $1
+	`
+	_, err := r.db.Exec(query, id, failedAttempts)
+	if err != nil {
+		return fmt.Errorf("failed to update login attempts: %w", err)
+	}
+
+	return nil
+}
+
+func (r *UserRepository) LockAccountAndResetLoginAttempts(id uuid.UUID, lockTime sql.NullTime) error {
+	query := `
+		UPDATE users
+		SET locked_until = $2, failed_login_attempts = 0
+		WHERE id = $1
+	`
+	_, err := r.db.Exec(query, id, lockTime)
+	if err != nil {
+		return fmt.Errorf("failed to lock account: %w", err)
+	}
+
+	return nil
+}
+
+func (r *UserRepository) ResetLoginAttempts(id uuid.UUID) error {
+	query := `
+		UPDATE users
+		SET failed_login_attempts = 0
+		WHERE id = $1
+	`
+	_, err := r.db.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("failed to reset login attempts: %w", err)
+	}
+
+	return nil
+}

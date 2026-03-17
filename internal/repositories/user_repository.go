@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	apperrors "github.com/arturhk05/go-auth-api/internal/errors"
 	"github.com/arturhk05/go-auth-api/internal/models"
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
@@ -63,7 +64,7 @@ func (r *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("user not found")
+			return nil, apperrors.ErrUserNotFound
 		}
 		return nil, fmt.Errorf("failed to get user by email: %w", err)
 	}
@@ -99,7 +100,7 @@ func (r *UserRepository) GetUserById(id uuid.UUID) (*models.User, error) {
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("user not found")
+			return nil, apperrors.ErrUserNotFound
 		}
 		return nil, fmt.Errorf("failed to get user by id: %w", err)
 	}

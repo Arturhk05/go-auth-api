@@ -1,10 +1,13 @@
 package middlewares
 
 import (
+	"errors"
+	"log"
 	"net/http"
 	"strings"
 
 	"github.com/arturhk05/go-auth-api/config"
+	apperrors "github.com/arturhk05/go-auth-api/internal/errors"
 	"github.com/arturhk05/go-auth-api/internal/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -29,7 +32,14 @@ func AuthMiddleware(cfg *config.Config) gin.HandlerFunc {
 
 		claims, err := utils.ValidateAccessToken(tokenString, cfg.JWT.Secret)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			if errors.Is(err, apperrors.ErrTokenExpired) {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "token expired"})
+			} else if errors.Is(err, apperrors.ErrInvalidToken) {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+			} else {
+				log.Printf("token validation error: %v", err)
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+			}
 			c.Abort()
 			return
 		}

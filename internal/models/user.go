@@ -41,6 +41,10 @@ type AuthResponse struct {
 	RefreshToken string    `json:"refresh_token,omitempty"`
 }
 
+type ErrorResponse struct {
+	Error string `json:"error" example:"invalid email or password"`
+}
+
 func (u *User) ToResponse() *User {
 	return &User{
 		ID:            u.ID,

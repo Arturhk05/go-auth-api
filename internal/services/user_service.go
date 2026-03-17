@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/arturhk05/go-auth-api/config"
 	"github.com/arturhk05/go-auth-api/internal/models"
 	"github.com/arturhk05/go-auth-api/internal/repositories"
@@ -21,7 +23,7 @@ func NewUserService(userRepo *repositories.UserRepository) *UserService {
 func (s *UserService) GetUserById(id uuid.UUID) (*models.User, error) {
 	user, err := s.userRepo.GetUserById(id)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("get user by id: %w", err)
 	}
 
 	response := user.ToResponse()

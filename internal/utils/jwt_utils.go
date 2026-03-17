@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	apperrors "github.com/arturhk05/go-auth-api/internal/errors"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -63,11 +64,11 @@ func ValidateAccessToken(tokenString string, secretKey string) (*Claims, error) 
 	}
 
 	if !token.Valid {
-		return nil, fmt.Errorf("invalid access token")
+		return nil, fmt.Errorf("invalid access token: %w", apperrors.ErrInvalidToken)
 	}
 
 	if claims.ExpiresAt == nil || claims.ExpiresAt.Before(time.Now().UTC()) {
-		return nil, fmt.Errorf("access token has expired")
+		return nil, fmt.Errorf("access token has expired: %w", apperrors.ErrTokenExpired)
 	}
 
 	return claims, nil
@@ -113,11 +114,11 @@ func ValidateRefreshToken(tokenString string, secretKey string) (*RefreshClaims,
 	}
 
 	if !token.Valid {
-		return nil, fmt.Errorf("invalid refresh token")
+		return nil, fmt.Errorf("invalid refresh token: %w", apperrors.ErrInvalidToken)
 	}
 
 	if claims.ExpiresAt == nil || claims.ExpiresAt.Before(time.Now().UTC()) {
-		return nil, fmt.Errorf("refresh token has expired")
+		return nil, fmt.Errorf("refresh token has expired: %w", apperrors.ErrTokenExpired)
 	}
 
 	return claims, nil

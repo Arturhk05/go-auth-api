@@ -30,6 +30,7 @@ func NewAuthHandler(authService *services.AuthService) *AuthHandler {
 // @Success      201   {object}  models.AuthResponse
 // @Failure      400   {object}  models.ErrorResponse  "Invalid request or validation failed"
 // @Failure      409   {object}  models.ErrorResponse  "User already exists"
+// @Failure      429   {object}  models.ErrorResponse  "Too many requests"
 // @Failure      500   {object}  models.ErrorResponse  "Internal server error"
 // @Router       /auth/register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
@@ -69,6 +70,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 // @Failure      400   {object}  models.ErrorResponse  "Invalid request or validation failed"
 // @Failure      401   {object}  models.ErrorResponse  "Invalid email or password"
 // @Failure      403   {object}  models.ErrorResponse  "Account is inactive or locked"
+// @Failure      429   {object}  models.ErrorResponse  "Too many requests"
 // @Failure      500   {object}  models.ErrorResponse  "Internal server error"
 // @Router       /auth/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
@@ -117,6 +119,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 // @Failure      400   {object}  models.ErrorResponse  "Invalid request"
 // @Failure      401   {object}  models.ErrorResponse  "Token expired, invalid, or revoked"
 // @Failure      403   {object}  models.ErrorResponse  "Account is inactive or locked"
+// @Failure      429   {object}  models.ErrorResponse  "Too many requests"
 // @Failure      500   {object}  models.ErrorResponse  "Internal server error"
 // @Router       /auth/refresh-token [post]
 func (h *AuthHandler) RefreshToken(c *gin.Context) {

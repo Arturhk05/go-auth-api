@@ -29,6 +29,7 @@ func NewUserHandler(userService *services.UserService) *UserHandler {
 // @Success      200   {object}  models.User
 // @Failure      401   {object}  models.ErrorResponse  "Missing or invalid authorization header, or token expired/invalid"
 // @Failure      404   {object}  models.ErrorResponse  "User not found"
+// @Failure      429   {object}  models.ErrorResponse  "Too many requests"
 // @Failure      500   {object}  models.ErrorResponse  "Internal server error"
 // @Router       /user/me [get]
 func (h *UserHandler) GetProfile(c *gin.Context) {

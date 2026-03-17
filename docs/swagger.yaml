@@ -110,6 +110,10 @@ paths:
           description: Account is inactive or locked
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+        "429":
+          description: Too many requests
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
         "500":
           description: Internal server error
           schema:
@@ -148,6 +152,10 @@ paths:
           description: Account is inactive or locked
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+        "429":
+          description: Too many requests
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
         "500":
           description: Internal server error
           schema:
@@ -182,6 +190,10 @@ paths:
           description: User already exists
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+        "429":
+          description: Too many requests
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
         "500":
           description: Internal server error
           schema:
@@ -207,6 +219,10 @@ paths:
             $ref: '#/definitions/models.ErrorResponse'
         "404":
           description: User not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "429":
+          description: Too many requests
           schema:
             $ref: '#/definitions/models.ErrorResponse'
         "500":

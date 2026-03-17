@@ -37,6 +37,12 @@ func main() {
 	}
 	defer db.Db.Close()
 
+	rdb, err := database.NewRedisClient(cfg)
+	if err != nil {
+		panic(err)
+	}
+	defer rdb.Client.Close()
+
 	if cfg.Server.Environment == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	} else {
@@ -53,8 +59,8 @@ func main() {
 	r := gin.Default()
 
 	r.Use(middlewares.SecurityHeadersMiddleware())
-
 	r.Use(middlewares.CORSMiddleware(cfg))
+	r.Use(middlewares.RateLimiterMiddleware(rdb.Client, cfg))
 
 	public := r.Group("/auth")
 	{

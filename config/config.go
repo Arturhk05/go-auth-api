@@ -10,11 +10,13 @@ import (
 )
 
 type Config struct {
-	Database DatabaseConfig
-	Server   ServerConfig
-	JWT      JWTConfig
-	Security SecurityConfig
-	CORS     CORSConfig
+	Database  DatabaseConfig
+	Server    ServerConfig
+	JWT       JWTConfig
+	Security  SecurityConfig
+	CORS      CORSConfig
+	Redis     RedisConfig
+	RateLimit RateLimitConfig
 }
 
 type DatabaseConfig struct {
@@ -52,6 +54,17 @@ type CORSConfig struct {
 	AllowedOrigins []string
 }
 
+type RedisConfig struct {
+	Addr     string
+	Password string
+	DB       int
+}
+
+type RateLimitConfig struct {
+	RequestsPerWindow int
+	WindowSeconds     int
+}
+
 func LoadConfig() (*Config, error) {
 	_ = godotenv.Load()
 
@@ -85,6 +98,15 @@ func LoadConfig() (*Config, error) {
 		},
 		CORS: CORSConfig{
 			AllowedOrigins: []string{getEnv("CORS_ALLOWED_ORIGINS", "http://localhost:3000")},
+		},
+		Redis: RedisConfig{
+			Addr:     getEnv("REDIS_ADDR", "localhost:6379"),
+			Password: getEnv("REDIS_PASSWORD", ""),
+			DB:       getEnvAsInt("REDIS_DB", 0),
+		},
+		RateLimit: RateLimitConfig{
+			RequestsPerWindow: getEnvAsInt("RATE_LIMIT_REQUESTS", 100),
+			WindowSeconds:     getEnvAsInt("RATE_LIMIT_WINDOW_SECONDS", 60),
 		},
 	}
 

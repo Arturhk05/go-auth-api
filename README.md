@@ -23,9 +23,9 @@ This is an project built with Golang that provides an authentication API impleme
 - [x] CI/CD pipeline setup
 - [x] Implement refresh tokens
 - [x] Add Swagger documentation
-- [ ] Improve error handling and response formatting
+- [x] Improve error handling and response formatting
+- [x] Add rate limiting with Redis
 - [ ] Add google OAuth authentication
-- [ ] Add rate limiting
 - [ ] Add email verification
 - [ ] Add password reset functionality
 - [ ] Add user roles and permissions

@@ -32,6 +32,7 @@ This is an project built with Golang that provides an authentication API impleme
 - [ ] Add logging and monitoring
 - [ ] Redis caching for session management
 - [ ] Add unit and integration tests for all components
+- [ ] Add Kubernetes deployment configuration
 
 
 ## Project Structure
